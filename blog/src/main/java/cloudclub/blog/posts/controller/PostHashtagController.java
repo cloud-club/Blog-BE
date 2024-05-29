@@ -6,6 +6,7 @@ import cloudclub.blog.posts.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -15,7 +16,7 @@ public class PostHashtagController {
     private final PostService postService;
 
     @PostMapping("/post")
-    public Long updatePost(@RequestBody PostRequestsDto requestsDto) {
-        return postService.save(requestsDto);
+    public Long updatePost(@RequestBody PostRequestsDto requestsDto, @RequestHeader Long userId) throws Exception {
+        return postService.save(requestsDto, userId);
     }
 }

@@ -11,17 +11,9 @@ import java.util.List;
 
 
 public record PostRequestsDto(
-        Long userId,
         String title,
         String contents,
         List<String> tagNames
 ) {
-    public Post toEntity() {
 
-        return Post.builder()
-                .title(title())
-                .contents(contents())
-                .userId(userId())
-                .build();
-    }
 }
