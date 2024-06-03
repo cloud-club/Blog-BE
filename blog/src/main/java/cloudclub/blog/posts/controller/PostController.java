@@ -22,4 +22,9 @@ public class PostController {
     public ResponseEntity<ResultMessage> getPost(@RequestParam Long postId, @RequestHeader Long userId) {
         return postService.getPost(postId, userId);
     }
+
+    @GetMapping("/MyBlog.io/@{userId}/{slug}")
+    public ResponseEntity<ResultMessage> getPost(@PathVariable Long userId, @PathVariable String slug) {
+        return postService.getPostByUrl(userId, slug);
+    }
 }
