@@ -3,23 +3,20 @@ package cloudclub.blog.follow.entity;
 
 import cloudclub.blog.posts.entity.BaseEntity;
 import cloudclub.blog.users.entity.User;
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 
+@Getter
 @Entity
 @Table(name = "follow_info")
-@Getter
 public class FollowInfo extends BaseEntity {
 
-
-    @ManyToOne
-    @JoinColumn(name = "user_id")
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "source_user_id")
     private User srcUser;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "target_user_id")
     private User targetUser;
+
 }
