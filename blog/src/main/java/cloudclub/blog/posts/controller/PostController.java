@@ -4,6 +4,8 @@ import cloudclub.blog.posts.dto.PostRequestsDto;
 import cloudclub.blog.posts.config.ResultMessage;
 import cloudclub.blog.posts.service.PostService;
 import lombok.RequiredArgsConstructor;
+import org.apache.coyote.Response;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,4 +29,5 @@ public class PostController {
     public ResponseEntity<ResultMessage> getPost(@PathVariable Long userId, @PathVariable String slug) {
         return postService.getPostByUrl(userId, slug);
     }
+
 }

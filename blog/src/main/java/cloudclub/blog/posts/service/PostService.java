@@ -12,7 +12,11 @@ import cloudclub.blog.posts.repository.PostHashtagRepository;
 import cloudclub.blog.posts.repository.PostRepository;
 import cloudclub.blog.posts.repository.HashtagRepository;
 import cloudclub.blog.posts.util.SlugUtil;
+import com.querydsl.core.types.EntityPath;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.*;
+import org.springframework.data.jpa.repository.query.JpaQueryMethodFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,6 +36,8 @@ public class PostService {
     private final PostRepository postRepository;
     private final HashtagRepository hashtagRepository;
     private final PostHashtagRepository postHashtagRepository;
+    private final JPAQueryFactory queryFactory;
+
     /*
     게시글 등록
      */

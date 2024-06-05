@@ -10,5 +10,4 @@ public interface PostHashtagRepository extends JpaRepository<PostHashtag, Long> 
     List<PostHashtag> findByPost(Post post);
     List<PostHashtag> findAllByPost(Post post);
 
-    List<PostHashtag> findAllByHashtagTagName(String tagName);
 }

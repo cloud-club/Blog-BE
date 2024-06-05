@@ -1,5 +1,6 @@
 package cloudclub.blog.posts.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -41,6 +42,7 @@ public class Post extends BaseEntity{
     private String ogDescription;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<PostHashtag> postHashtags;
 
     @Builder
