@@ -16,8 +16,4 @@ public class PostResponseDto {
     Long userId;
     String url;
 
-    String ogTitle;
-    String ogDescription;
-    String thumbImg;
-
 }
