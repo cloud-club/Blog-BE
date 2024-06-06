@@ -118,7 +118,7 @@ public class PostService {
     /*
     slug로 불러오기
      */
-    public ResponseEntity<ResultMessage> getPostByUrl(Long userId, String slug) {
+    public ResponseEntity<ResultMessage> getPostDtoByUrl(Long userId, String slug) {
         String url = "MyBlog.io/@"+userId+"/"+slug;
         Post post = postRepository.findByUrl(url).orElseThrow(() -> new CustomException("Post Not Found", "413"));
 
@@ -132,7 +132,6 @@ public class PostService {
                 .contents(post.getContents())
                 .tagNames(listTagName)
                 .build();
-
         //response
         ResultMessage message = new ResultMessage();
         HttpHeaders headers = new HttpHeaders();
@@ -143,6 +142,16 @@ public class PostService {
         headers.set("userId", String.valueOf(userId));
 
         return new ResponseEntity<>(message, headers, HttpStatus.OK);
+    }
+
+    public Post getPostByUrl(Long userId, String slug) {
+        String url = "MyBlog.io/@"+userId+"/"+slug;
+        Post post = postRepository.findByUrl(url).orElseThrow(() -> new CustomException("Post Not Found", "413"));
+        return post;
+    }
+
+    public void deletePost(Long postId) {
+        postRepository.deleteById(postId);
     }
 
 }
