@@ -144,14 +144,12 @@ public class PostService {
         return new ResponseEntity<>(message, headers, HttpStatus.OK);
     }
 
-    public Post getPostByUrl(Long userId, String slug) {
-        String url = "MyBlog.io/@"+userId+"/"+slug;
-        Post post = postRepository.findByUrl(url).orElseThrow(() -> new CustomException("Post Not Found", "413"));
-        return post;
-    }
-
+    /*
+    게시글 삭제: delYn = True로 변경
+     */
     public void deletePost(Long postId) {
         postRepository.deleteById(postId);
     }
+
 
 }

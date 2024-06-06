@@ -32,10 +32,10 @@ public class PostController {
         return postService.getPostDtoByUrl(userId, slug);
     }
 
-    @DeleteMapping("/MyBlog.io/@{userId}/{slug}")
-    public void deletePost(@PathVariable Long userId, @PathVariable String slug) {
-        Post post = postService.getPostByUrl(userId, slug);
-        postService.deletePost(post.getId());
+    @DeleteMapping("/v1/post")
+    public void deletePost(@PathVariable Long postId) {
+        postService.deletePost(postId);
     }
+
 
 }
