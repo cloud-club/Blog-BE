@@ -1,6 +1,7 @@
 package cloudclub.blog.users.entity;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -9,6 +10,7 @@ import lombok.NoArgsConstructor;
 @Entity
 public class User {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
 
     private String email;
@@ -44,4 +46,12 @@ public class User {
     private String stack;
 
     private String position;
+
+    @Builder
+    public User(String email, String name, String profile, String role) {
+        this.email = email;
+        this.name = name;
+        this.profile = profile;
+        this.role = role;
+    }
 }
