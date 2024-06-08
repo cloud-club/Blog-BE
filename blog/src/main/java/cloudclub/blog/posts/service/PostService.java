@@ -168,13 +168,16 @@ public class PostService {
         }
         postRepository.save(post);
 
-        //해시태그 처리. 기존 해시태그 제거. 해시태그 cnt가 0인 경우 해당 hashtag 삭제
+        //해시태그 처리. 기존 해시태그 제거
         if (postRequestsDto.tagNames().size() != 0) {
             List<PostHashtag> postHashtags = postHashtagRepository.findByPost(post);
             postHashtags.stream()
                             .forEach(postHashtag ->
-                                postHashtagRepository.delete(postHashtag));
+                                    {postHashtagRepository.delete(postHashtag);
 
+                                        Hashtag hashtag = postHashtag.getHashtag();
+                                        hashtagService.removeHashtag(hashtag);
+                                    });
         }
 
         //새로운 해시 태그 저장: postHashtag, hashtag

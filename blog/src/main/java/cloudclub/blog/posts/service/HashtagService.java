@@ -27,4 +27,17 @@ public class HashtagService {
                         .build());
     }
 
+    public void checkHashtag(Hashtag hashtag) {
+        int cnt = hashtag.getCnt();
+        if (cnt == 0) {
+            hashtagRepository.delete(hashtag);
+        }
+    }
+
+    public void removeHashtag(Hashtag hashtag) {
+        hashtag.decreaseCnt();
+        hashtagRepository.save(hashtag);
+        checkHashtag(hashtag);
+    }
+
 }

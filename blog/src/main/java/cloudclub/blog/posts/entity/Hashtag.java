@@ -15,6 +15,7 @@ import java.util.List;
 public class Hashtag extends BaseEntity {
 
     private String tagName;
+    private int cnt = 0;
 
     @OneToMany(mappedBy = "hashtag", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
@@ -25,6 +26,12 @@ public class Hashtag extends BaseEntity {
         this.tagName = tagName;
     }
 
+    public void increaseCnt() {
+        this.cnt += 1;
+    }
 
+    public void decreaseCnt() {
+        this.cnt -= 1;
+    }
 
 }
