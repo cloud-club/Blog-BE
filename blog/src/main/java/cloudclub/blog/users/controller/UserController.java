@@ -12,7 +12,7 @@ import java.security.Principal;
 @Slf4j
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/user")
+@RequestMapping("/api/user")
 public class UserController {
     @GetMapping()
     @ResponseBody
