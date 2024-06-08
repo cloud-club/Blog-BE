@@ -25,4 +25,6 @@ public class Hashtag extends BaseEntity {
         this.tagName = tagName;
     }
 
+
+
 }

@@ -37,5 +37,8 @@ public class PostController {
         postService.deletePost(postId);
     }
 
-
+    @PatchMapping("/v1/post")
+    public ResponseEntity<ResultMessage> updatePost(@RequestParam Long postId, @RequestBody PostRequestsDto requestsDto) throws Exception {
+        return postService.update(postId, requestsDto);
+    }
 }

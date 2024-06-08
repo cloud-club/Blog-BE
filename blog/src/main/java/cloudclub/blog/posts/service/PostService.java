@@ -6,6 +6,7 @@ import cloudclub.blog.posts.dto.PostDto;
 import cloudclub.blog.posts.dto.PostRequestsDto;
 import cloudclub.blog.posts.config.ResultMessage;
 import cloudclub.blog.posts.dto.PostResponseDto;
+import cloudclub.blog.posts.entity.Hashtag;
 import cloudclub.blog.posts.entity.Post;
 import cloudclub.blog.posts.entity.PostHashtag;
 import cloudclub.blog.posts.repository.PostHashtagRepository;
@@ -34,6 +35,7 @@ public class PostService {
     private final PostHashtagService postHashtagService;
     private final PostRepository postRepository;
     private final HashtagRepository hashtagRepository;
+    private final HashtagService hashtagService;
     private final PostHashtagRepository postHashtagRepository;
 
     /*
@@ -151,5 +153,43 @@ public class PostService {
         postRepository.deleteById(postId);
     }
 
+    /*
+    게시글 수정
+     */
+    public ResponseEntity<ResultMessage> update(Long postId, PostRequestsDto postRequestsDto) throws Exception {
+        Post post = postRepository.findById(postId).orElseThrow(() -> new CustomException("Post Not Found", "413"));
+
+        if (postRequestsDto.title() != null) {
+            post.updatePostTitle(postRequestsDto.title());
+        }
+
+        if (postRequestsDto.contents() != null) {
+            post.updatePostContents(postRequestsDto.contents());
+        }
+        postRepository.save(post);
+
+        //해시태그 처리. 기존 해시태그 제거. 해시태그 cnt가 0인 경우 해당 hashtag 삭제
+        if (postRequestsDto.tagNames().size() != 0) {
+            List<PostHashtag> postHashtags = postHashtagRepository.findByPost(post);
+            postHashtags.stream()
+                            .forEach(postHashtag ->
+                                postHashtagRepository.delete(postHashtag));
+
+        }
+
+        //새로운 해시 태그 저장: postHashtag, hashtag
+        postHashtagService.saveHashtag(post, postRequestsDto.tagNames());
+
+
+        //response
+        ResultMessage message = new ResultMessage();
+        HttpHeaders headers = new HttpHeaders();
+
+        message.setStatus(StatusEnum.OK);
+        message.setData(postRequestsDto);
+        message.setMessage("Post Patch");
+
+        return new ResponseEntity<>(message, headers, HttpStatus.OK);
+    }
 
 }

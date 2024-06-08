@@ -1,5 +1,6 @@
 package cloudclub.blog.posts.service;
 
+import cloudclub.blog.posts.config.CustomException;
 import cloudclub.blog.posts.entity.Hashtag;
 import cloudclub.blog.posts.repository.HashtagRepository;
 import lombok.RequiredArgsConstructor;
@@ -19,9 +20,11 @@ public class HashtagService {
     }
 
     public Hashtag save(String tagName) {
+
         return hashtagRepository.save(
                 Hashtag.builder()
                         .tagName(tagName)
                         .build());
     }
+
 }

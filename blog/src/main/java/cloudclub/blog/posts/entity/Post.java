@@ -3,10 +3,7 @@ package cloudclub.blog.posts.entity;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.persistence.CascadeType;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.*;
 import org.springframework.web.ErrorResponse;
 
@@ -65,5 +62,12 @@ public class Post extends BaseEntity{
         this.delYn = false;
     }
 
+    public void updatePostTitle(String title) {
+        this.title = title;
+    }
+
+    public void updatePostContents(String contents) {
+        this.contents = contents;
+    }
 
 }
