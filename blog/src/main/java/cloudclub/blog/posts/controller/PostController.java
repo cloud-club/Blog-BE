@@ -1,7 +1,9 @@
 package cloudclub.blog.posts.controller;
 
+import cloudclub.blog.posts.dto.PostDto;
 import cloudclub.blog.posts.dto.PostRequestsDto;
 import cloudclub.blog.posts.config.ResultMessage;
+import cloudclub.blog.posts.entity.Post;
 import cloudclub.blog.posts.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.Response;
@@ -27,7 +29,16 @@ public class PostController {
 
     @GetMapping("/MyBlog.io/@{userId}/{slug}")
     public ResponseEntity<ResultMessage> getPost(@PathVariable Long userId, @PathVariable String slug) {
-        return postService.getPostByUrl(userId, slug);
+        return postService.getPostDtoByUrl(userId, slug);
     }
 
+    @DeleteMapping("/v1/post")
+    public void deletePost(@RequestParam Long postId) {
+        postService.deletePost(postId);
+    }
+
+    @PatchMapping("/v1/post")
+    public ResponseEntity<ResultMessage> updatePost(@RequestParam Long postId, @RequestBody PostRequestsDto requestsDto) throws Exception {
+        return postService.update(postId, requestsDto);
+    }
 }

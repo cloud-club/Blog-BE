@@ -2,10 +2,9 @@ package cloudclub.blog.posts.entity;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import jakarta.persistence.CascadeType;
+import lombok.*;
+import org.hibernate.annotations.*;
 import org.springframework.web.ErrorResponse;
 
 import java.time.LocalDateTime;
@@ -14,6 +13,8 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @Entity
+@SQLDelete(sql = "UPDATE post SET del_yn=true WHERE id = ?")
+@SQLRestriction("del_yn = false")
 public class Post extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -41,6 +42,12 @@ public class Post extends BaseEntity{
     @Column(name = "ogDescription")
     private String ogDescription;
 
+    @Column(name = "view_count")
+    private Long viewCount;
+
+    @Column(name = "del_yn")
+    private Boolean delYn;
+
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private List<PostHashtag> postHashtags;
@@ -51,15 +58,16 @@ public class Post extends BaseEntity{
         this.contents = contents;
         this.userId = userId;
         this.url = url;
+        this.viewCount = 0L;
+        this.delYn = false;
     }
 
+    public void updatePostTitle(String title) {
+        this.title = title;
+    }
 
-//    //여기 아래로는 사용 X
-//    @Column(name = "view_count")
-//    private Long viewCount;
-//
-//    @Column(name = "del_yn")
-//    private String delYn;
-
+    public void updatePostContents(String contents) {
+        this.contents = contents;
+    }
 
 }

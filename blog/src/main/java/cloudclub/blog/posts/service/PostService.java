@@ -6,6 +6,7 @@ import cloudclub.blog.posts.dto.PostDto;
 import cloudclub.blog.posts.dto.PostRequestsDto;
 import cloudclub.blog.posts.config.ResultMessage;
 import cloudclub.blog.posts.dto.PostResponseDto;
+import cloudclub.blog.posts.entity.Hashtag;
 import cloudclub.blog.posts.entity.Post;
 import cloudclub.blog.posts.entity.PostHashtag;
 import cloudclub.blog.posts.repository.PostHashtagRepository;
@@ -34,6 +35,7 @@ public class PostService {
     private final PostHashtagService postHashtagService;
     private final PostRepository postRepository;
     private final HashtagRepository hashtagRepository;
+    private final HashtagService hashtagService;
     private final PostHashtagRepository postHashtagRepository;
 
     /*
@@ -118,7 +120,7 @@ public class PostService {
     /*
     slug로 불러오기
      */
-    public ResponseEntity<ResultMessage> getPostByUrl(Long userId, String slug) {
+    public ResponseEntity<ResultMessage> getPostDtoByUrl(Long userId, String slug) {
         String url = "MyBlog.io/@"+userId+"/"+slug;
         Post post = postRepository.findByUrl(url).orElseThrow(() -> new CustomException("Post Not Found", "413"));
 
@@ -132,7 +134,6 @@ public class PostService {
                 .contents(post.getContents())
                 .tagNames(listTagName)
                 .build();
-
         //response
         ResultMessage message = new ResultMessage();
         HttpHeaders headers = new HttpHeaders();
@@ -141,6 +142,55 @@ public class PostService {
         message.setData(postDto);
         message.setMessage("Post Get");
         headers.set("userId", String.valueOf(userId));
+
+        return new ResponseEntity<>(message, headers, HttpStatus.OK);
+    }
+
+    /*
+    게시글 삭제: delYn = True로 변경
+     */
+    public void deletePost(Long postId) {
+        postRepository.deleteById(postId);
+    }
+
+    /*
+    게시글 수정
+     */
+    public ResponseEntity<ResultMessage> update(Long postId, PostRequestsDto postRequestsDto) throws Exception {
+        Post post = postRepository.findById(postId).orElseThrow(() -> new CustomException("Post Not Found", "413"));
+
+        if (postRequestsDto.title() != null) {
+            post.updatePostTitle(postRequestsDto.title());
+        }
+
+        if (postRequestsDto.contents() != null) {
+            post.updatePostContents(postRequestsDto.contents());
+        }
+        postRepository.save(post);
+
+        //해시태그 처리. 기존 해시태그 제거
+        if (postRequestsDto.tagNames().size() != 0) {
+            List<PostHashtag> postHashtags = postHashtagRepository.findByPost(post);
+            postHashtags.stream()
+                            .forEach(postHashtag ->
+                                    {postHashtagRepository.delete(postHashtag);
+
+                                        Hashtag hashtag = postHashtag.getHashtag();
+                                        hashtagService.removeHashtag(hashtag);
+                                    });
+        }
+
+        //새로운 해시 태그 저장: postHashtag, hashtag
+        postHashtagService.saveHashtag(post, postRequestsDto.tagNames());
+
+
+        //response
+        ResultMessage message = new ResultMessage();
+        HttpHeaders headers = new HttpHeaders();
+
+        message.setStatus(StatusEnum.OK);
+        message.setData(postRequestsDto);
+        message.setMessage("Post Patch");
 
         return new ResponseEntity<>(message, headers, HttpStatus.OK);
     }
