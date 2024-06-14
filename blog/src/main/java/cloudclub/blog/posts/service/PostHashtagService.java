@@ -3,6 +3,7 @@ package cloudclub.blog.posts.service;
 import cloudclub.blog.posts.entity.Hashtag;
 import cloudclub.blog.posts.entity.Post;
 import cloudclub.blog.posts.entity.PostHashtag;
+import cloudclub.blog.posts.repository.HashtagRepository;
 import cloudclub.blog.posts.repository.PostHashtagRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,7 @@ import java.util.List;
 public class PostHashtagService {
     private final HashtagService hashtagService;
     private final PostHashtagRepository postHashtagRepository;
+    private final HashtagRepository hashtagRepository;
 
     public void saveHashtag(Post post, List<String> tagNames) {
         //tag가 없는 경우
@@ -31,6 +33,8 @@ public class PostHashtagService {
 
     //hashtag와 post를 연결하는 DB table에 저장
     private Long mapHashtagToPost(Post post, Hashtag hashtag) {
+        hashtag.increaseCnt();
+        hashtagRepository.save(hashtag);
         return postHashtagRepository.save(new PostHashtag(post, hashtag)).getId();
     }
 
