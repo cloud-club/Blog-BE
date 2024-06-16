@@ -1,5 +1,6 @@
 package cloudclub.blog.users.controller;
 
+import cloudclub.blog.global.annotation.LoginInfo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -18,5 +19,10 @@ public class UserController {
     @ResponseBody
     public String healthCheck(Principal principal) {
         return principal.getName();
+    }
+    @GetMapping("/annotation")
+    @ResponseBody
+    public String healthCheckAnnotation(@LoginInfo String userId) {
+        return userId;
     }
 }
