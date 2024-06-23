@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - develop
 
 jobs:
   build:
@@ -11,6 +12,17 @@ jobs:
     with:
       project: backend
       ecr_repository: blog-backend-${{ github.ref_name }}
+    secrets:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+  deploy:
+    needs: build
+    uses: cloud-club/Blog-CICD/.github/workflows/deploy.yaml@main
+    with:
+      project: backend
+      ecr_repository: blog-backend-${{ github.ref_name }}
+      image_tag: ${{ needs.build.outputs.image_tag }}
     secrets:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
